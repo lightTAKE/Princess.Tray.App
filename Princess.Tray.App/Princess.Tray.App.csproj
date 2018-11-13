@@ -58,16 +58,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="TimeConstant.cs" />
-    <Compile Include="IdleTimeRetriever.cs" />
-    <Compile Include="IShutdownManager.cs" />
-    <Compile Include="Retry.cs" />
+    <Compile Include="Helpers\TimeConstant.cs" />
+    <Compile Include="Helpers\IdleTimeRetriever.cs" />
+    <Compile Include="Core\IShutdownManager.cs" />
+    <Compile Include="Helpers\Retry.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DelegateCommand.cs" />
-    <Compile Include="ShutdownManager.cs" />
+    <Compile Include="Core\ShutdownManager.cs" />
     <Page Include="NotifyIconResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

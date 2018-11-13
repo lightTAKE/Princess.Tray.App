@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Princess.Tray.App
+namespace Princess.Tray.App.Core
 {
     public interface IShutdownManager
     {

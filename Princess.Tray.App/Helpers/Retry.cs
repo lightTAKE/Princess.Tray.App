@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Princess.Tray.App
+namespace Princess.Tray.App.Helpers
 {
     public static class Retry
     {

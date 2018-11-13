@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Princess.Tray.App.Helpers;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Princess.Tray.App
+namespace Princess.Tray.App.Core
 {
     public class ShutdownManager : IShutdownManager
     {
@@ -26,8 +27,8 @@ namespace Princess.Tray.App
         {
             CancelShutdown();
             _running = true;
-            var action = GetShutdownCondition(delayForSeconds);
-            await Retry.Do(action, TimeSpan.FromSeconds(1), _cancellationTokenSource.Token);
+            var action = GetShutdownAction(delayForSeconds);
+            await Retry.Do(action, TimeSpan.FromSeconds((int)TimeConstant.Minute), _cancellationTokenSource.Token);
         }
 
         public void CancelShutdown()
@@ -41,14 +42,14 @@ namespace Princess.Tray.App
             }
         }
 
-        private Action GetShutdownCondition(int delayForSeconds)
+        private Action GetShutdownAction(int delayForSeconds)
         {
             Action action = () =>
             {
                 var idleSeconds = IdleTimeRetriever.GetSeconds();
                 if (IsSleepyTime() && idleSeconds > delayForSeconds)
                 {
-                    Shutdown(30);
+                    Shutdown((int)TimeConstant.Seconds30);
                 }
             };
 

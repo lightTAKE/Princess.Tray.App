@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Princess.Tray.App
+namespace Princess.Tray.App.Helpers
 {
     public static class IdleTimeRetriever
     {

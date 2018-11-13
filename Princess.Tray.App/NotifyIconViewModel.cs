@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Princess.Tray.App.Core;
+using Princess.Tray.App.Helpers;
 
 namespace Princess.Tray.App
 {
