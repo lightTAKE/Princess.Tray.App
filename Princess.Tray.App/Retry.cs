@@ -6,11 +6,12 @@ namespace Princess.Tray.App
 {
     public static class Retry
     {
-        public static async Task Do(Action action, Func<bool> retryCondition,TimeSpan retryInterval, CancellationToken cancellationToken)
+        public static async Task Do(Action action, TimeSpan retryInterval, CancellationToken cancellationToken)
         {
-            while (retryCondition())
+            while (true)
             {
                 action();
+
                 await Task.Delay(retryInterval);
 
                 if (cancellationToken.IsCancellationRequested)
