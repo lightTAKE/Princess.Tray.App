@@ -58,12 +58,8 @@ namespace Princess.Tray.App.Core
 
         private bool IsSleepyTime()
         {
-            var today = DateTimeOffset.Now.Date;
-            var yesterday = today.AddDays(-1);
-            var sleepyTimeStart = new DateTimeOffset(yesterday.Year, yesterday.Month, yesterday.Day, 23, 0, 0, DateTimeOffset.Now.Offset);
-            var sleepyTimeEnd = new DateTimeOffset(today.Year, today.Month, today.Day, 7, 0, 0, DateTimeOffset.Now.Offset);
-
-            return sleepyTimeStart <= DateTimeOffset.Now && DateTimeOffset.Now <= sleepyTimeEnd;
+            var currentHour = DateTimeOffset.Now.Hour;
+            return 23 <= currentHour || currentHour <= 7;
         }
     }
 }
