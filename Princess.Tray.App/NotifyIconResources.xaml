@@ -10,13 +10,13 @@
   -->
 
     <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
-        <MenuItem Header="Shutdown NOW!" Command="{Binding InstantShutdownCommand}" />
+        <MenuItem Header="Shut down NOW!" Command="{Binding InstantShutDownCommand}" />
         <Separator />
         <MenuItem Header="After idle time: 1 hour" Command="{Binding NightShutDown60Command}" />
         <MenuItem Header="After idle time: 45 min" Command="{Binding NightShutDown45Command}" />
         <MenuItem Header="After idle time: 30 min" Command="{Binding NightShutDown30Command}" />
         <Separator />
-        <MenuItem Header="Cancel shutdwon" Command="{Binding CancelShutDownCommand}" />
+        <MenuItem Header="Disable sleepy time tracker" Command="{Binding DisableSleepyTimeTracker}" />
         <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}" />
     </ContextMenu>
 

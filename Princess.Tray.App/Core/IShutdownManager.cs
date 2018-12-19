@@ -2,12 +2,12 @@
 
 namespace Princess.Tray.App.Core
 {
-    public interface IShutdownManager
+    public interface IShutDownManager
     {
-        void Shutdown(int delayForSeconds);
+        void ShutDown();
 
-        Task NightShutdown(int delayForSeconds);
+        Task NightShutDown(int timeout);
 
-        void CancelShutdown();
+        void DisableIdleTracker();
     }
 }

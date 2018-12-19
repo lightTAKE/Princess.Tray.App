@@ -8,21 +8,21 @@ namespace Princess.Tray.App
 {
     public class NotifyIconViewModel
     {
-        private ShutdownManager _shutdownManager;
+        private ShutDownManager _shutDownManager;
 
         public NotifyIconViewModel()
         {
-            _shutdownManager = new ShutdownManager();
-            Task.Factory.StartNew(async () => await _shutdownManager.NightShutdown((int)TimeConstant.Minutes45));
+            _shutDownManager = new ShutDownManager();
+            Task.Factory.StartNew(async () => await _shutDownManager.NightShutDown((int)TimeConstant.Minutes45));
         }
 
-        public ICommand InstantShutdownCommand
+        public ICommand InstantShutDownCommand
         {
             get
             {
                 return new DelegateCommand
                 {
-                    CommandAction = () => _shutdownManager.Shutdown(0)
+                    CommandAction = () => _shutDownManager.ShutDown()
                 };
             }
         }
@@ -33,7 +33,7 @@ namespace Princess.Tray.App
             {
                 return new DelegateCommand
                 {
-                    CommandAction = async () => await _shutdownManager.NightShutdown((int)TimeConstant.Hour)
+                    CommandAction = async () => await _shutDownManager.NightShutDown((int)TimeConstant.Hour)
                 };
             }
         }
@@ -44,7 +44,7 @@ namespace Princess.Tray.App
             {
                 return new DelegateCommand
                 {
-                    CommandAction = async () => await _shutdownManager.NightShutdown((int)TimeConstant.Minutes45)
+                    CommandAction = async () => await _shutDownManager.NightShutDown((int)TimeConstant.Minutes45)
                 };
             }
         }
@@ -55,18 +55,18 @@ namespace Princess.Tray.App
             {
                 return new DelegateCommand
                 {
-                    CommandAction = async () => await _shutdownManager.NightShutdown((int)TimeConstant.Minutes30)
+                    CommandAction = async () => await _shutDownManager.NightShutDown((int)TimeConstant.Minutes30)
                 };
             }
         }
 
-        public ICommand CancelShutDownCommand
+        public ICommand DisableSleepyTimeTracker
         {
             get
             {
                 return new DelegateCommand
                 {
-                    CommandAction = () => _shutdownManager.CancelShutdown()
+                    CommandAction = () => _shutDownManager.DisableIdleTracker()
                 };
             }
         }

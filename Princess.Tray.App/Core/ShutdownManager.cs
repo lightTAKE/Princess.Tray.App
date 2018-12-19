@@ -1,37 +1,36 @@
 ﻿using Princess.Tray.App.Helpers;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Princess.Tray.App.Core
 {
-    public class ShutdownManager : IShutdownManager
+    public class ShutDownManager : IShutDownManager
     {
         private bool _running = false;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public ShutdownManager()
+        public ShutDownManager()
         {
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public void Shutdown(int delayForSeconds)
+        public void ShutDown()
         {
-            CancelShutdown();
+            DisableIdleTracker();
             _running = true;
-            Process.Start("shutdown", $"/s /t {delayForSeconds}");
+            ShutDownApi.ShutDown();
         }
 
-        public async Task NightShutdown(int delayForSeconds)
+        public async Task NightShutDown(int timeout)
         {
-            CancelShutdown();
+            DisableIdleTracker();
             _running = true;
-            var action = GetShutdownAction(delayForSeconds);
+            var action = GetShutdownAction(timeout);
             await Retry.Do(action, TimeSpan.FromSeconds((int)TimeConstant.Minute), _cancellationTokenSource.Token);
         }
 
-        public void CancelShutdown()
+        public void DisableIdleTracker()
         {
             if (_running)
             {
@@ -42,14 +41,14 @@ namespace Princess.Tray.App.Core
             }
         }
 
-        private Action GetShutdownAction(int delayForSeconds)
+        private Action GetShutdownAction(int timeout)
         {
             Action action = () =>
             {
                 var idleSeconds = IdleTimeRetriever.GetSeconds();
-                if (IsSleepyTime() && idleSeconds > delayForSeconds)
+                if (IsSleepyTime() && idleSeconds > timeout)
                 {
-                    Shutdown((int)TimeConstant.Seconds30);
+                    ShutDown();
                 }
             };
 
