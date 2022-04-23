@@ -1,14 +1,20 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+﻿using Princess.Tray.App.Annotations;
 using Princess.Tray.App.Core;
 using Princess.Tray.App.Helpers;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Princess.Tray.App
 {
-    public class NotifyIconViewModel
+    public class NotifyIconViewModel : INotifyPropertyChanged
     {
-        private ShutDownManager _shutDownManager;
+        private readonly ShutDownManager _shutDownManager;
+        private bool _isNightShutDownAfter60MinutesActive;
+        private bool _isNightShutDownAfter45MinutesActive;
+        private bool _isNightShutDownAfter30MinutesActive;
 
         public NotifyIconViewModel()
         {
@@ -27,38 +33,61 @@ namespace Princess.Tray.App
             }
         }
 
-        public ICommand NightShutDown60Command
+        public bool IsNightShutDownAfter60MinutesActive
         {
-            get
+            get => _isNightShutDownAfter60MinutesActive;
+            set
             {
-                return new DelegateCommand
+                if (value == _isNightShutDownAfter60MinutesActive) return;
+                _isNightShutDownAfter60MinutesActive = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsSleepyTimeTrackerActive));
+
+                if (value)
                 {
-                    CommandAction = async () => await _shutDownManager.NightShutDown((int)TimeConstant.Hour)
-                };
+                    _ = _shutDownManager.NightShutDown((int)TimeConstant.Hour);
+                }
             }
         }
 
-        public ICommand NightShutDown45Command
+        public bool IsNightShutDownAfter45MinutesActive
         {
-            get
+            get => _isNightShutDownAfter45MinutesActive;
+            set
             {
-                return new DelegateCommand
+                if (value == _isNightShutDownAfter45MinutesActive) return;
+                _isNightShutDownAfter45MinutesActive = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsSleepyTimeTrackerActive));
+
+                if (value)
                 {
-                    CommandAction = async () => await _shutDownManager.NightShutDown((int)TimeConstant.Minutes45)
-                };
+                    _ = _shutDownManager.NightShutDown((int)TimeConstant.Minutes45);
+                }
             }
         }
 
-        public ICommand NightShutDown30Command
+        public bool IsNightShutDownAfter30MinutesActive
         {
-            get
+            get => _isNightShutDownAfter30MinutesActive;
+            set
             {
-                return new DelegateCommand
+                if (value == _isNightShutDownAfter30MinutesActive) return;
+                _isNightShutDownAfter30MinutesActive = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsSleepyTimeTrackerActive));
+
+                if (value)
                 {
-                    CommandAction = async () => await _shutDownManager.NightShutDown((int)TimeConstant.Minutes30)
-                };
+                    _ = _shutDownManager.NightShutDown((int)TimeConstant.Minutes30);
+                }
             }
         }
+
+        public bool IsSleepyTimeTrackerActive =>
+            IsNightShutDownAfter30MinutesActive
+            || IsNightShutDownAfter45MinutesActive
+            || IsNightShutDownAfter60MinutesActive;
 
         public ICommand DisableSleepyTimeTracker
         {
@@ -66,7 +95,7 @@ namespace Princess.Tray.App
             {
                 return new DelegateCommand
                 {
-                    CommandAction = () => _shutDownManager.DisableIdleTracker()
+                    CommandAction = DisableTracker
                 };
             }
         }
@@ -77,6 +106,23 @@ namespace Princess.Tray.App
             {
                 return new DelegateCommand { CommandAction = () => Application.Current.Shutdown() };
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void DisableTracker()
+        {
+            IsNightShutDownAfter30MinutesActive = false;
+            IsNightShutDownAfter45MinutesActive = false;
+            IsNightShutDownAfter60MinutesActive = false;
+
+            _shutDownManager.DisableIdleTracker();
         }
     }
 }
