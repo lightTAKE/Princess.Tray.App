@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:tb="http://www.hardcodet.net/taskbar"
-                    xmlns:local="clr-namespace:Princess.Tray.App">
+                    xmlns:local="clr-namespace:Princess.Tray.App"
+                    xmlns:converters="clr-namespace:Princess.Tray.App.Converters">
 
     <!-- The taskbar context menu - the first row is a dummy to show off simple data binding -->
     <!--
@@ -9,14 +10,15 @@
         reuse the same context menu (which is a resource) again (which will have its DataContext set to the old TaskbarIcon)
   -->
 
+    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
         <MenuItem Header="Shut down NOW!" Command="{Binding InstantShutDownCommand}" />
         <Separator />
-        <MenuItem Header="After idle time: 1 hour" Command="{Binding NightShutDown60Command}" />
-        <MenuItem Header="After idle time: 45 min" Command="{Binding NightShutDown45Command}" />
-        <MenuItem Header="After idle time: 30 min" Command="{Binding NightShutDown30Command}" />
+        <MenuItem Header="After idle time: 1 hour" IsCheckable="True" IsChecked="{Binding Path=IsNightShutDownAfter60MinutesActive, Mode=TwoWay}" IsEnabled="{Binding IsSleepyTimeTrackerActive, Converter={StaticResource InverseBooleanConverter}}" />
+        <MenuItem Header="After idle time: 45 min"  IsCheckable="True" IsChecked="{Binding Path=IsNightShutDownAfter45MinutesActive, Mode=TwoWay}" IsEnabled="{Binding IsSleepyTimeTrackerActive, Converter={StaticResource InverseBooleanConverter}}" />
+        <MenuItem Header="After idle time: 30 min"  IsCheckable="True" IsChecked="{Binding Path=IsNightShutDownAfter30MinutesActive, Mode=TwoWay}" IsEnabled="{Binding IsSleepyTimeTrackerActive, Converter={StaticResource InverseBooleanConverter}}" />
         <Separator />
-        <MenuItem Header="Disable sleepy time tracker" Command="{Binding DisableSleepyTimeTracker}" />
+        <MenuItem Header="Disable sleepy time tracker" Command="{Binding DisableSleepyTimeTracker}" IsEnabled="{Binding IsSleepyTimeTrackerActive}" />
         <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}" />
     </ContextMenu>
 
@@ -31,5 +33,4 @@
             <local:NotifyIconViewModel />
         </tb:TaskbarIcon.DataContext>
     </tb:TaskbarIcon>
-
 </ResourceDictionary>
